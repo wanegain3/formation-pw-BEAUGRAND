@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Boutique PW</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #dbe1ea;
+      --accent: #2563eb;
+      --accent-dark: #1d4ed8;
+      --danger: #b91c1c;
+      --success: #166534;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+
+    header .tagline {
+      color: #cbd5e1;
+      font-size: .9rem;
+    }
+
+    main {
+      width: min(1100px, calc(100% - 32px));
+      margin: 32px auto;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    .login-wrap {
+      max-width: 460px;
+      margin: 70px auto;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      font-weight: 700;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font: inherit;
+      background: white;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .primary:hover { background: var(--accent-dark); }
+
+    .secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .danger {
+      background: #fee2e2;
+      color: var(--danger);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .product {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .product-visual {
+      height: 140px;
+      background:
+        linear-gradient(135deg, rgba(37,99,235,.12), rgba(99,102,241,.06)),
+        #eef2ff;
+      display: grid;
+      place-items: center;
+      font-size: 3rem;
+    }
+
+    .product-body {
+      padding: 16px;
+    }
+
+    .product h3 {
+      margin: 0 0 6px;
+    }
+
+    .product p {
+      color: var(--muted);
+      min-height: 44px;
+    }
+
+    .product-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .price {
+      font-weight: 800;
+    }
+
+    .cart-count {
+      display: inline-grid;
+      place-items: center;
+      min-width: 28px;
+      height: 28px;
+      padding: 0 8px;
+      background: #dbeafe;
+      color: #1e40af;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+
+    .notice {
+      padding: 12px 14px;
+      border-radius: 8px;
+      margin: 14px 0 0;
+    }
+
+    .notice.error {
+      background: #fee2e2;
+      color: var(--danger);
+    }
+
+    .notice.success {
+      background: #dcfce7;
+      color: var(--success);
+    }
+
+    .hidden { display: none !important; }
+
+    .cart-list {
+      display: grid;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .cart-row {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .small {
+      font-size: .9rem;
+      color: var(--muted);
+    }
+
+    .credentials {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-top: 18px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1 title="boutique">Boutique PW</h1>
+      <div class="tagline">Mini-boutique locale pour les exercices de test</div>
+    </div>
+    <div id="sessionArea" class="hidden">
+      <span id="currentUser"></span>
+      <button id="logoutBtn" class="secondary" type="button">Déconnexion</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="loginView" class="login-wrap panel" aria-labelledby="loginTitle">
+      <h2 id="loginTitle">Connexion</h2>
+
+      <label for="username">Nom d'utilisateur</label>
+      <input id="username" name="username" autocomplete="username" placeholder="Nom d'utilisateur" />
+
+      <label for="password">Mot de passe</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Mot de passe" />
+
+      <button id="loginBtn" class="primary" type="button" style="margin-top:18px;width:100%">Connexion</button>
+
+      <div id="loginError" class="notice error hidden" role="alert">
+        Identifiants incorrects.
+      </div>
+
+      <div class="credentials" data-testid="credentials">
+        <strong>Compte de démonstration</strong><br />
+        Utilisateur : <code>stagiaire</code><br />
+        Mot de passe : <code>playwright</code>
+      </div>
+    </section>
+
+    <section id="shopView" class="hidden">
+      <div class="toolbar">
+        <div>
+          <h2 style="margin:0">Produits</h2>
+          <div class="small">Ajoutez quelques produits au panier.</div>
+        </div>
+
+        <div class="toolbar-actions">
+          <label for="sort" style="margin:0">Trier</label>
+          <select id="sort" aria-label="Trier les produits">
+            <option value="default">Par défaut</option>
+            <option value="price-asc">Prix croissant</option>
+            <option value="price-desc">Prix décroissant</option>
+          </select>
+
+          <button id="cartBtn" class="secondary" type="button">
+            Panier <span id="cartCount" class="cart-count">0</span>
+          </button>
+        </div>
+      </div>
+
+      <ul id="productGrid" class="products"></ul>
+    </section>
+
+    <section id="cartView" class="panel hidden" aria-labelledby="cartTitle">
+      <div class="toolbar">
+        <div>
+          <h2 id="cartTitle" style="margin:0">Votre panier</h2>
+          <div class="small">Vérifiez les produits avant de valider.</div>
+        </div>
+        <button id="backToShopBtn" class="secondary" type="button">Continuer mes achats</button>
+      </div>
+
+      <div id="cartList" class="cart-list"></div>
+
+      <div class="toolbar" style="margin-top:20px">
+        <strong>Total : <span id="cartTotal">0,00 €</span></strong>
+        <button id="checkoutBtn" class="primary" type="button">Passer la commande</button>
+      </div>
+
+      <div id="checkoutSuccess" class="notice success hidden" role="status">
+        Commande validée. Merci !
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const products = [
+      { id: 1, name: 'Tasse Debug', price: 12.90, emoji: '☕', description: 'Pour les tests qui échouent avant le café.' },
+      { id: 2, name: 'T-shirt Locator', price: 24.90, emoji: '👕', description: 'Toujours trouver le bon élément.' },
+      { id: 3, name: 'Canard QA', price: 9.50, emoji: '🦆', description: 'Expliquez-lui votre bug avant de paniquer.' },
+      { id: 4, name: 'Sticker CI Verte', price: 3.90, emoji: '✅', description: 'À coller après un pipeline réussi.' }
+    ];
+
+    let cart = [];
+
+    const loginView = document.getElementById('loginView');
+    const shopView = document.getElementById('shopView');
+    const cartView = document.getElementById('cartView');
+    const sessionArea = document.getElementById('sessionArea');
+    const currentUser = document.getElementById('currentUser');
+    const loginError = document.getElementById('loginError');
+    const productGrid = document.getElementById('productGrid');
+    const cartCount = document.getElementById('cartCount');
+    const cartList = document.getElementById('cartList');
+    const cartTotal = document.getElementById('cartTotal');
+    const checkoutSuccess = document.getElementById('checkoutSuccess');
+
+    function show(view) {
+      [loginView, shopView, cartView].forEach(v => v.classList.add('hidden'));
+      view.classList.remove('hidden');
+    }
+
+    function renderProducts(list = products) {
+      productGrid.innerHTML = '';
+      list.forEach(product => {
+        const article = document.createElement('li');
+        article.className = 'product';
+        article.innerHTML = `
+          <div class="product-visual" aria-hidden="true">${product.emoji}</div>
+          <div class="product-body">
+            <h3>${product.name}</h3>
+            <p>${product.description}</p>
+            <div class="product-bottom">
+              <span class="price">${product.price.toFixed(2).replace('.', ',')} €</span>
+              <button
+                class="primary add-to-cart"
+                type="button"
+                data-product-id="${product.id}"
+                aria-label="Ajouter ${product.name} au panier">
+                Ajouter au panier
+              </button>
+            </div>
+          </div>
+        `;
+        productGrid.appendChild(article);
+      });
+
+      document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', () => {
+          const id = Number(button.dataset.productId);
+          const product = products.find(p => p.id === id);
+          cart.push(product);
+          updateCartCount();
+          button.textContent = 'Ajouté';
+          setTimeout(() => button.textContent = 'Ajouter au panier', 600);
+        });
+      });
+    }
+
+    function updateCartCount() {
+      cartCount.textContent = String(cart.length);
+    }
+
+    function renderCart() {
+      cartList.innerHTML = '';
+
+      if (cart.length === 0) {
+        cartList.innerHTML = '<p>Votre panier est vide.</p>';
+      } else {
+        cart.forEach((product, index) => {
+          const row = document.createElement('div');
+          row.className = 'cart-row';
+          row.innerHTML = `
+            <div>
+              <strong>${product.name}</strong><br />
+              <span class="small">${product.price.toFixed(2).replace('.', ',')} €</span>
+            </div>
+            <button class="danger remove-item" type="button" data-index="${index}">
+              Supprimer
+            </button>
+          `;
+          cartList.appendChild(row);
+        });
+      }
+
+      document.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', () => {
+          cart.splice(Number(button.dataset.index), 1);
+          updateCartCount();
+          renderCart();
+        });
+      });
+
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      cartTotal.textContent = `${total.toFixed(2).replace('.', ',')} €`;
+    }
+
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (username === 'stagiaire' && password === 'playwright') {
+        loginError.classList.add('hidden');
+        currentUser.textContent = `Connecté : ${username}`;
+        sessionArea.classList.remove('hidden');
+        show(shopView);
+        renderProducts();
+      } else {
+        loginError.classList.remove('hidden');
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      cart = [];
+      updateCartCount();
+      sessionArea.classList.add('hidden');
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      show(loginView);
+    });
+
+    document.getElementById('cartBtn').addEventListener('click', () => {
+      checkoutSuccess.classList.add('hidden');
+      renderCart();
+      show(cartView);
+    });
+
+    document.getElementById('backToShopBtn').addEventListener('click', () => {
+      show(shopView);
+    });
+
+    document.getElementById('checkoutBtn').addEventListener('click', () => {
+      if (cart.length === 0) return;
+      checkoutSuccess.classList.remove('hidden');
+      cart = [];
+      updateCartCount();
+      renderCart();
+    });
+
+    document.getElementById('sort').addEventListener('change', event => {
+      let list = [...products];
+
+      if (event.target.value === 'price-asc') {
+        list.sort((a, b) => a.price - b.price);
+      } else if (event.target.value === 'price-desc') {
+        list.sort((a, b) => b.price - a.price);
+      }
+
+      renderProducts(list);
+    });
+
+    renderProducts();
+  </script>
+</body>
+</html>
