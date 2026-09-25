@@ -51,6 +51,19 @@ export default defineConfig({
 
     /* Test against mobile viewports. */
     // {
+    //   name: 'Galaxy S26',
+    //   use: {
+    //     browserName: 'chromium',
+    //     viewport: {
+    //       width: 360,
+    //       height: 780
+    //     },
+    //     deviceScaleFactor: 3,
+    //     isMobile: true,
+    //     hasTouch: true
+    //   },
+    // },
+    // {
     //   name: 'Mobile Chrome',
     //   use: { ...devices['Pixel 5'] },
     // },
@@ -68,19 +81,6 @@ export default defineConfig({
     //   name: 'Google Chrome',
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
-    {
-      name: 'Galaxy S26',
-      use: {
-        browserName: 'chromium',
-        viewport: {
-          width: 360,
-          height: 780
-        },
-        deviceScaleFactor: 3,
-        isMobile: true,
-        hasTouch: true
-      },
-    },
   ],
 
   /* Run your local dev server before starting the tests */
