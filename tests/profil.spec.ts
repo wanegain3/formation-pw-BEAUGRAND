@@ -51,19 +51,19 @@ test('enregistrer et retrouver les préférences utilisateur', async ({ page }) 
 test('afficher des commandes simulées', async ({ page }) => {
 
   await page.route('**/api/orders.json', async route => {
-    // await route.fulfill({
-    //   status: 200,
-    //   contentType: 'application/json',
-    //   body: JSON.stringify([
-    //     {
-    //       reference: 'CMD-TEST-001',
-    //       date: '24/09/2026',
-    //       status: 'Expédiée',
-    //       total: '42,00 €'
-    //     }
-    //   ])
-    // });
-    await route.continue();                 // continuer normalement
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify([
+        {
+          reference: 'CMD-TEST-001',
+          date: '24/09/2026',
+          status: 'Expédiée',
+          total: '42,00 €'
+        }
+      ])
+    });
+    // await route.continue();              // continuer normalement
     // await route.fulfill({ status: 500 }) // erreur 500
     // await route.abort()                  // panne réseau
   });
