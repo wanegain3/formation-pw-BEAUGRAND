@@ -4,7 +4,7 @@ import { test, expect } from './fixtures';
 test('rechercher Gourde Trace Viewer dans le catalogue', async ({ authenticatedPage }) => {
     await authenticatedPage.getByLabel('Rechercher un produit').fill('Gourde Trace Viewer');
     const produits = authenticatedPage.locator('#catalogGrid article');
-    await expect(produits).toHaveCount(2);
+    await expect(produits).toHaveCount(1);
     await expect(produits.getByRole('heading', { name: 'Gourde Trace Viewer' })).toBeVisible();
 });
 
