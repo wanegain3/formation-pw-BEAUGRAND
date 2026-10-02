@@ -1,0 +1,9 @@
+{
+  "name": "playwright-exercices",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "watch": "node --watch server.js"
+  }
+}
